@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AppointmentController;
+use App\Http\Controllers\MedicineController;
 use App\Http\Controllers\PatientController;
 use App\Models\Laboratory;
 use Illuminate\Http\Request;
@@ -34,16 +35,24 @@ Route::prefix('appointments')->group(function () {
     Route::get('get_all_appointments', [AppointmentController::class, 'get_all_appointments']);
     Route::get('get_appointment/{id}', [AppointmentController::class, 'get_appointment']);
     Route::get('get_appointment_by_patient/{id}', [AppointmentController::class, 'get_appointments_by_patient']);
+    Route::get('get_appointment_lab_request/{id}', [AppointmentController::class, 'get_appointment_lab_request']);
     Route::post('insert_appointment', [AppointmentController::class, 'insert_appointment']);
     Route::put('update_appointment/{id}', [AppointmentController::class, 'update_appointment']);
     Route::put('cancel_appointment/{id}', [AppointmentController::class, 'cancel_appointment']);
 });
 
+Route::prefix('medicines')->group(function () {
+    Route::get('get_all_medicines', [MedicineController::class, 'get_all_medicines']);
+    Route::post('insert_medicine', [MedicineController::class, 'insert_medicine']);
+});
+
+
+
 Route::post('file_upload', function (Request $request) {
     $path = $request->file('file')->store('public');
     $laboratory = Laboratory::find($request->lab_request_id);
     $laboratory->result_url = $path;
-    $laboratory->status = 'success';
+    $laboratory->status = 'completed';
     $laboratory->save();
     return $laboratory;
 });

@@ -60,4 +60,10 @@ class AppointmentController extends Controller
         //Return all appointment and Laboratories.
         return Patient::with(['appointments.laboratory', 'appointments.patient'])->find($request->patient_id);
     }
+
+    public function get_appointment_lab_request($id)
+    {
+        $appointment = Appointment::findOrFail($id);
+        return Laboratory::findOrFail($appointment->lab_request_id);
+    }
 }

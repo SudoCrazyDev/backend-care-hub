@@ -2,7 +2,9 @@
 
 use App\Http\Controllers\AppointmentController;
 use App\Http\Controllers\MedicineController;
+use App\Http\Controllers\OutPatientController;
 use App\Http\Controllers\PatientController;
+use App\Http\Controllers\UserController;
 use App\Models\Laboratory;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -22,6 +24,8 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
+Route::post('login', [UserController::class, 'login']);
+
 Route::prefix('patients')->group(function () {
     Route::get('get_patients', [PatientController::class, 'get_all_patients']);
     Route::get('get_patient/{id}', [PatientController::class, 'get_patient']);
@@ -36,6 +40,7 @@ Route::prefix('appointments')->group(function () {
     Route::get('get_appointment/{id}', [AppointmentController::class, 'get_appointment']);
     Route::get('get_appointment_by_patient/{id}', [AppointmentController::class, 'get_appointments_by_patient']);
     Route::get('get_appointment_lab_request/{id}', [AppointmentController::class, 'get_appointment_lab_request']);
+    Route::get('get_appointment_out_patient/{id}', [AppointmentController::class, 'get_appointment_out_patient']);
     Route::post('insert_appointment', [AppointmentController::class, 'insert_appointment']);
     Route::put('update_appointment/{id}', [AppointmentController::class, 'update_appointment']);
     Route::put('cancel_appointment/{id}', [AppointmentController::class, 'cancel_appointment']);
@@ -44,6 +49,12 @@ Route::prefix('appointments')->group(function () {
 Route::prefix('medicines')->group(function () {
     Route::get('get_all_medicines', [MedicineController::class, 'get_all_medicines']);
     Route::post('insert_medicine', [MedicineController::class, 'insert_medicine']);
+});
+
+Route::prefix('out_patients')->group(function () {
+    Route::get('get_all_outpatients', [OutPatientController::class, 'get_all_outpatients']);
+    Route::get('get_outpatient/{id}', [OutPatientController::class, 'get_outpatient']);
+    Route::post('insert_outpatient', [OutPatientController::class, 'insert_outpatient']);
 });
 
 

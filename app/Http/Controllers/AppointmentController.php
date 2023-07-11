@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Appointment;
 use App\Models\Laboratory;
+use App\Models\OutPatient;
 use App\Models\Patient;
 use Illuminate\Http\Request;
 
@@ -63,7 +64,12 @@ class AppointmentController extends Controller
 
     public function get_appointment_lab_request($id)
     {
-        $appointment = Appointment::findOrFail($id);
+        $appointment = Appointment::find($id);
         return Laboratory::findOrFail($appointment->lab_request_id);
+    }
+
+    public function get_appointment_out_patient($id)
+    {
+        return OutPatient::where('appointment_id', $id)->get();
     }
 }

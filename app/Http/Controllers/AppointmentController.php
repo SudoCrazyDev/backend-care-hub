@@ -72,4 +72,16 @@ class AppointmentController extends Controller
     {
         return OutPatient::where('appointment_id', $id)->get();
     }
+
+    public function update_appointment(Request $request, $id)
+    {
+        $appointment = Appointment::findOrFail($id);
+        $appointment->blood_pressure = $request->blood_pressure;
+        $appointment->heart_rate = $request->heart_rate;
+        $appointment->temperature = $request->temperature;
+        $appointment->weight = $request->weight;
+        $appointment->chief_complaint = $request->chief_complaint;
+        $appointment->save();
+        return Appointment::with(['laboratory', 'patient'])->get();
+    }
 }

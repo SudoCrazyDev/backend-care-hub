@@ -29,8 +29,11 @@ Route::post('login', [UserController::class, 'login']);
 Route::prefix('patients')->group(function () {
     Route::get('get_patients', [PatientController::class, 'get_all_patients']);
     Route::get('get_patient/{id}', [PatientController::class, 'get_patient']);
+    Route::get('get_patient_photo/{id}', [PatientController::class, 'get_patient_photo']);
+    Route::get('get_patient_laboratories/{id}', [PatientController::class, 'get_patient_laboratories']);
     Route::get('lookup/{keyword}', [PatientController::class, 'patient_lookup']);
     Route::post('insert_patient', [PatientController::class, 'insert_patient']);
+    Route::post('insert_laboratory', [PatientController::class, 'insert_patient_laboratory']);
     Route::put('update_patient/{id}', [PatientController::class, 'update_patient']);
     Route::delete('delete_patient/{id}', [PatientController::class, 'delete_patient']);
 });

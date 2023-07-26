@@ -6,10 +6,12 @@ use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Spatie\MediaLibrary\HasMedia;
+use Spatie\MediaLibrary\InteractsWithMedia;
 
-class Patient extends Model
+class Patient extends Model implements HasMedia
 {
-    use HasUuids, HasFactory;
+    use HasUuids, HasFactory, InteractsWithMedia;
 
     protected $fillable = [
         'firstname',

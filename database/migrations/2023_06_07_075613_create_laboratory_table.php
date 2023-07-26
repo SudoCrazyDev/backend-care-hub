@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('laboratories', function (Blueprint $table) {
             $table->uuid('id')->primary();
-            $table->foreignUuid('appointment_id')->constrained('appointments');
+            $table->foreignUuid('appointment_id')->nullable()->constrained('appointments');
             $table->foreignUuid('patient_id')->constrained('patients');
             $table->date('result_date')->nullable();
             $table->string('cbc')->nullable();
@@ -24,7 +24,7 @@ return new class extends Migration
             $table->string('others')->nullable(); //JSON
             $table->string('status')->nullable();
             $table->string('request_id')->nullable();
-            $table->string('result_url')->nullable();
+            $table->text('result_url')->nullable();
             $table->string('type')->nullable();
             $table->timestamps();
         });

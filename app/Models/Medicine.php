@@ -12,6 +12,7 @@ class Medicine extends Model
 
     protected $fillable = [
         'name',
-        'unit'
+        'unit',
+        'brand'
     ];
 }

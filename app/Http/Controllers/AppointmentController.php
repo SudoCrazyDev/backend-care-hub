@@ -6,6 +6,7 @@ use App\Models\Appointment;
 use App\Models\Laboratory;
 use App\Models\OutPatient;
 use App\Models\Patient;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 
 class AppointmentController extends Controller
@@ -13,6 +14,11 @@ class AppointmentController extends Controller
     public function get_all_appointments()
     {
         return Appointment::with(['laboratory', 'patient'])->get();
+    }
+
+    public function get_appointments_by_date($date)
+    {
+        return Appointment::with(['laboratory', 'patient'])->where('consultation_date', Carbon::parse($date))->get();
     }
 
     public function get_appointment($id)
@@ -30,7 +36,7 @@ class AppointmentController extends Controller
         $appointment = Appointment::findOrFail($id);
         $appointment->status = 'cancelled';
         $appointment->save();
-        return Patient::with(['appointments.laboratory', 'appointments.patient'])->find($request->patient_id);
+        return Appointment::with(['laboratory', 'patient'])->where('consultation_date', Carbon::parse($request->current_date))->get();
     }
 
     public function insert_appointment(Request $request)
@@ -44,13 +50,9 @@ class AppointmentController extends Controller
             $laboratory = Laboratory::create([
                 'appointment_id' => $appointment->id,
                 'patient_id' => $request->patient_id,
-                'cbc' => $lab_request['cbc'],
-                'urinalysis' => $lab_request['urinalysis'],
-                'stool_exam' => $lab_request['stool_exam'],
-                'blood_chemistry' => $lab_request['blood_chemistry'],
-                'xray' => $lab_request['xray'],
+                'form_details' => $lab_request,
                 'status' => 'Waiting for Result',
-                'type' => 'Request',
+                'type' => 'Request'
             ]);
 
             //Update the appointment add the laboratory;
@@ -58,6 +60,13 @@ class AppointmentController extends Controller
             $appointment->save();
         }
 
+        if($request->has_medications){
+            OutPatient::create([
+                'appointment_id' => $appointment->id,
+                'patient_id' => $request->patient_id,
+                'medicines' => $request->medications
+            ]);
+        }
         //Return all appointment and Laboratories.
         return Patient::with(['appointments.laboratory', 'appointments.patient'])->find($request->patient_id);
     }
@@ -70,7 +79,7 @@ class AppointmentController extends Controller
 
     public function get_appointment_out_patient($id)
     {
-        return OutPatient::where('appointment_id', $id)->get();
+        return OutPatient::with('admission')->where('appointment_id', $id)->get();
     }
 
     public function update_appointment(Request $request, $id)
@@ -82,6 +91,6 @@ class AppointmentController extends Controller
         $appointment->weight = $request->weight;
         $appointment->chief_complaint = $request->chief_complaint;
         $appointment->save();
-        return Appointment::with(['laboratory', 'patient'])->get();
+        return Appointment::with(['laboratory', 'patient'])->where('consultation_date', Carbon::parse($appointment->consultation_date))->get();
     }
 }

@@ -19,7 +19,7 @@ return new class extends Migration
             $table->string('weight')->nullable();
             $table->string('heart_rate')->nullable();
             $table->string('temperature')->nullable();
-            $table->string('chief_complaint')->nullable();
+            $table->text('chief_complaint')->nullable();
             $table->boolean('has_lab_request')->default(false);
             $table->string('lab_request_id')->default(false);
             $table->string('status')->nullable();

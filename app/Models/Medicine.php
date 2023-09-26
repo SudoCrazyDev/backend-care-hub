@@ -11,8 +11,19 @@ class Medicine extends Model
     use HasFactory, HasUuids;
 
     protected $fillable = [
-        'name',
-        'unit',
-        'brand'
+        'generic_name',
+        'description',
+        'unit_id',
+        'brand_id'
     ];
+    
+    public function unit()
+    {
+        return $this->belongsTo(MedicineUnit::class);
+    }
+    
+    public function brand()
+    {
+        return $this->belongsTo(MedicineBrand::class);
+    }
 }

@@ -11,12 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('medicines', function (Blueprint $table) {
+        Schema::create('meta_values', function (Blueprint $table) {
             $table->uuid('id')->primary();
-            $table->string('generic_name');
-            $table->text('description')->nullable();
-            $table->foreignUuid('unit_id')->nullable();
-            $table->foreignUuid('brand_id')->nullable();
+            $table->string('meta_key')->unique();
+            $table->text('meta_values')->nullable();
             $table->timestamps();
         });
     }
@@ -26,6 +24,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('medicines');
+        Schema::dropIfExists('meta_values');
     }
 };

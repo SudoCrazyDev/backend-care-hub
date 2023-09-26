@@ -11,14 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('out_patients', function (Blueprint $table) {
+        Schema::create('referral_forms', function (Blueprint $table) {
             $table->uuid('id')->primary();
-            $table->string('appointment_id')->nullable();
-            $table->string('patient_id')->nullable();
-            $table->text('significant_findings')->nullable();
-            $table->text('medicines')->nullable();
-            $table->bigInteger('professional_fee')->default(0);
-            $table->bigInteger('amount_tendered')->default(0);
+            $table->text('doctor')->nullable();
+            $table->text('hospital')->nullable();
+            $table->text('other_problems')->nullable();
             $table->text('remarks')->nullable();
             $table->timestamps();
         });
@@ -29,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('out_patient');
+        Schema::dropIfExists('referral_forms');
     }
 };

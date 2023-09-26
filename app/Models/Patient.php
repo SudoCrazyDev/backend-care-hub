@@ -36,4 +36,9 @@ class Patient extends Model implements HasMedia
     {
         return $this->hasMany(Laboratory::class);
     }
+    
+    public function admissions() : HasMany
+    {
+        return $this->hasMany(AdmissionForm::class);
+    }
 }

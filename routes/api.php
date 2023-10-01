@@ -74,10 +74,10 @@ Route::prefix('medicines')->group(function () {
 Route::prefix('out_patients')->group(function () {
     Route::get('get_all_outpatients', [OutPatientController::class, 'get_all_outpatients']);
     Route::get('get_outpatient/{id}', [OutPatientController::class, 'get_outpatient']);
+    Route::post('reports', [OutPatientController::class, 'get_outpatient_report']);
     Route::post('billout', [OutPatientController::class, 'billout']);
     Route::post('insert_outpatient', [OutPatientController::class, 'insert_outpatient']);
 });
-
 
 Route::prefix('meta_values')->group(function () {
     Route::get('get_meta_key_value/{meta_key}', [MetaValuesController::class, 'get_meta_key_value']);

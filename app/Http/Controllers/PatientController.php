@@ -35,6 +35,7 @@ class PatientController extends Controller
     public function get_patient_photo($id)
     {
         $patient = Patient::find($id);
+        $patient_photos = $patient->getMedia();
         return $patient->getMedia()[0]->getUrl();
     }
 
@@ -226,6 +227,12 @@ class PatientController extends Controller
                             'medicines' => json_encode($to_parsed_medicines)
                         ]);
                     }
+                }
+                
+                //INSERT PHOTO
+                $patient_has_photo = file_exists('D:\Pictures' . "\\" . $patient->cPatientCode . '.jpg');
+                if($patient_has_photo){
+                    $new_patient->addMedia('D:\Pictures' . "\\" . $patient->cPatientCode . '.jpg')->toMediaCollection();
                 }
                 
             }

@@ -74,4 +74,13 @@ class OutPatientController extends Controller
         $appointment->save();
         return Appointment::with(['laboratory', 'patient'])->where('consultation_date', Carbon::parse($request->current_date))->get();
     }
+    
+    public function get_outpatient_report (Request $request)
+    {
+        $out_patients = OutPatient::whereBetween('created_at', [$request->dateFrom, $request->dateTo])
+                    ->where('appointment_id', '<>', null)
+                    ->with(['appointment', 'patient'])
+                    ->get();
+        return $out_patients;
+    }
 }

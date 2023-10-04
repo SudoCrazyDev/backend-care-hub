@@ -83,4 +83,15 @@ class OutPatientController extends Controller
                     ->get();
         return $out_patients;
     }
+    
+    public function update_outpatient (Request $request, $id)
+    {
+        $outpatient = OutPatient::find($id);
+        $outpatient->medicines = $request->medications;
+        $outpatient->significant_findings = $request->significant_findings;
+        $outpatient->professional_fee = $request->professional_fee;
+        $outpatient->remarks = $request->remarks;
+        $outpatient->save();
+        return Appointment::with(['laboratory', 'patient'])->where('consultation_date', Carbon::parse($request->current_date))->get();
+    }
 }

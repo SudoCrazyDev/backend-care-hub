@@ -77,6 +77,7 @@ Route::prefix('out_patients')->group(function () {
     Route::post('reports', [OutPatientController::class, 'get_outpatient_report']);
     Route::post('billout', [OutPatientController::class, 'billout']);
     Route::post('insert_outpatient', [OutPatientController::class, 'insert_outpatient']);
+    Route::put('update/{id}',[OutPatientController::class, 'update_outpatient']);
 });
 
 Route::prefix('meta_values')->group(function () {

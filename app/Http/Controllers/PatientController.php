@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\PatientResource;
 use App\Models\AdmissionForm;
 use App\Models\Appointment;
 use App\Models\Laboratory;
@@ -16,14 +17,16 @@ class PatientController extends Controller
 {
     public function get_all_patients()
     {
-        return Patient::with('appointments')->paginate(10);
+        return PatientResource::collection(Patient::with('appointments')->paginate(10));
     }
 
     public function patient_lookup($patient_keyword)
     {
-        return Patient::where('firstname', 'LIKE', '%' . $patient_keyword . '%')
-            ->orWhere('lastname', 'LIKE', '%' . $patient_keyword . '%')
-            ->get();
+        return
+        PatientResource::collection( Patient::where('firstname', 'LIKE', '%' . $patient_keyword . '%')
+        ->orWhere('lastname', 'LIKE', '%' . $patient_keyword . '%')
+        ->get());
+        ;
     }
 
     public function get_patient($id)
@@ -41,16 +44,25 @@ class PatientController extends Controller
 
     public function insert_patient(Request $request)
     {
-        $patient = Patient::create($request->all());
-        $patient->addMediaFromBase64($request->photo_url)->toMediaCollection();
-        return $patient;
+        DB::transaction(function() use($request){
+            $patient = Patient::create($request->all());
+            $patient->addMediaFromBase64($request->photo_url)->toMediaCollection();
+        });
+        return PatientResource::collection(Patient::with('appointments')->paginate(10));
     }
 
     public function update_patient(Request $request, $id)
     {
-        $patient = Patient::find($id);
-        $patient->update($request->all());
-        return Patient::with('appointments')->paginate(10);
+        DB::transaction(function() use($request, $id){
+            $patient = Patient::find($id);
+            $patient->update($request->all());
+            $mediaItems = $patient->getMedia();
+            if(count($mediaItems) > 0){
+                $mediaItems[0]->delete();   
+            }
+            $patient->addMediaFromBase64($request->photo_url)->toMediaCollection();
+        });
+        return PatientResource::collection(Patient::with('appointments')->paginate(10));
     }
 
     public function delete_patient($id)

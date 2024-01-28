@@ -13,7 +13,7 @@ class MedicineController extends Controller
 {
     public function get_all_medicines()
     {
-        return Medicine::with(['brand', 'unit'])->get();
+        return Medicine::with(['brand', 'unit'])->paginate(10);
     }
     
     public function lookup_medicine($keyword)

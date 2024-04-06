@@ -67,6 +67,7 @@ Route::prefix('medicines')->group(function () {
     Route::get('get_medicine_brands', [MedicineController::class, 'get_medicine_brands']);
     Route::get('get_medicine_units', [MedicineController::class, 'get_medicine_units']);
     Route::get('lookup_medicine/{keyword}', [MedicineController::class, 'lookup_medicine']);
+    Route::get('lookup_unit/{keyword}', [MedicineController::class, 'lookup_medicine_unit']);
     Route::post('insert_medicine', [MedicineController::class, 'insert_medicine']);
 });
 

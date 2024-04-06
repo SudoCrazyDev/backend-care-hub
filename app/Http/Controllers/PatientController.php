@@ -38,7 +38,6 @@ class PatientController extends Controller
     public function get_patient_photo($id)
     {
         $patient = Patient::find($id);
-        $patient_photos = $patient->getMedia();
         return $patient->getMedia()[0]->getUrl();
     }
 
@@ -46,7 +45,9 @@ class PatientController extends Controller
     {
         DB::transaction(function() use($request){
             $patient = Patient::create($request->all());
-            $patient->addMediaFromBase64($request->photo_url)->toMediaCollection();
+            if($request->photo_url){
+                $patient->addMediaFromBase64($request->photo_url)->toMediaCollection();
+            }
         });
         return PatientResource::collection(Patient::with('appointments')->paginate(10));
     }
